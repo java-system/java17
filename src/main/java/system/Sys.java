@@ -84,7 +84,7 @@ public class Sys {
     }
 
     public static Object readAsJson(String path) throws Exception {
-        return Sys.readAsJson(path);
+        return fromJson(readAsText(path));
     }
 
     public static void writeStringToFile(String path, String data) throws Exception {

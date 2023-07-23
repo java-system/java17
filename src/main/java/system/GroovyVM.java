@@ -9,12 +9,10 @@ import java.lang.reflect.Method;
 
 public class GroovyVM {
 
-    //protected GroovyShell shell = null;
     protected Class<?> bindingClass = null;
     protected Object binding = null;
     protected Class<?> shellClass = null;
     protected Object shell = null;
-    //protected Binding binding = null; //new Binding();
 
     public java.util.Map<String, Long> imported = new java.util.LinkedHashMap<String, Long>();
 
@@ -130,39 +128,63 @@ public class GroovyVM {
         return Sys.newMap(args);
     }
 
-    public String readAsText(String path) throws Exception {
-        return Sys.readAsText(path);
-    }
-
-    public Object readAsJson(String path) throws Exception {
-        return Sys.readAsJson(path);
-    }
-
-    public Object load(String path) throws Exception {
-        return eval(readAsText(path));
-    }
-
-    public void require(String path) throws Exception {
-        if (path.startsWith(":/")) {
-        } else if (path.startsWith("http:") || path.startsWith("https:")) {
-        } else {
-            path = new File(path).getAbsolutePath();
+    public String readAsText(String path) {
+        try {
+            return Sys.readAsText(path);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        if (this.imported.containsKey(path)) {
-            long count = this.imported.get(path);
-            this.imported.put(path, count + 1);
-            return;
+    }
+
+    public Object readAsJson(String path) {
+        try {
+            return Sys.readAsJson(path);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        eval(readAsText(path));
-        this.imported.put(path, 1L);
     }
 
-    public void writeStringToFile(String path, String data) throws Exception {
-        Sys.writeStringToFile(path, data);
+    public Object load(String path) {
+        try {
+            return eval(readAsText(path));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public String readStringFromFile(String path, String fallback) throws Exception {
-        return Sys.readStringFromFile(path, fallback);
+    public void require(String path) {
+        try {
+            if (path.startsWith(":/")) {
+            } else if (path.startsWith("http:") || path.startsWith("https:")) {
+            } else {
+                path = new File(path).getAbsolutePath();
+            }
+            if (this.imported.containsKey(path)) {
+                long count = this.imported.get(path);
+                this.imported.put(path, count + 1);
+                return;
+            }
+            eval(readAsText(path));
+            this.imported.put(path, 1L);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void writeStringToFile(String path, String data) {
+        try {
+            Sys.writeStringToFile(path, data);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String readStringFromFile(String path, String fallback) {
+        try {
+            return Sys.readStringFromFile(path, fallback);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

@@ -1,0 +1,70 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.github.java-system'
+            artifactId = 'java17'
+            version = '2023.0721.0500'
+            from components.java
+        }
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+        //vendor = JvmVendorSpec.ADOPTIUM
+    }
+}
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+//compileGroovy.options.encoding = 'UTF-8'
+//compileTestGroovy.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+    implementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+    ////implementation 'org.codehaus.groovy:groovy-all:3.0.18'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-main-kts
+    //implementation 'org.jetbrains.kotlin:kotlin-main-kts:1.9.0'
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-scripting-jsr223
+    //runtimeOnly 'org.jetbrains.kotlin:kotlin-scripting-jsr223:1.9.0'
+    api 'com.google.guava:guava:31.1-jre'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-io
+	api 'org.apache.commons:commons-io:1.3.2'
+	// https://mvnrepository.com/artifact/org.mozilla/rhino
+    api 'org.mozilla:rhino:1.7.14'
+    // https://mvnrepository.com/artifact/org.eclipse.swt/org.eclipse.swt.win32.win32.x86_64
+    api 'org.eclipse.swt:org.eclipse.swt.win32.win32.x86_64:4.3'
+    // https://mvnrepository.com/artifact/org.mongodb/bson
+    api 'org.mongodb:bson:4.10.2'
+}
+
+test {
+  // JUnit platform を使う設定
+  useJUnitPlatform()
+  testLogging {
+    // テスト時の標準出力と標準エラー出力を表示する
+    showStandardStreams true
+    // イベントを出力する (TestLogEvent)
+    events 'started', 'skipped', 'passed', 'failed'
+    // 例外発生時の出力設定 (TestExceptionFormat)
+    exceptionFormat 'full'
+  }
+}
+
+jar {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+}
+
+task runSingle

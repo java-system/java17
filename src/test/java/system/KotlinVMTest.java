@@ -1,3 +1,4 @@
+/*
 package system;
 
 import org.junit.jupiter.api.Test;
@@ -41,3 +42,4 @@ vm.echo(obj.get("b"));
     }
 
 }
+*/

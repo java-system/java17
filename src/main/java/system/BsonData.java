@@ -1,7 +1,9 @@
 package system;
 
 ////import com.oracle.truffle.regex.tregex.util.json.JsonNull;
+
 import org.bson.*;
+import org.bson.conversions.Bson;
 import org.bson.types.*;
 import org.bson.codecs.BsonDocumentCodec;
 import org.bson.io.BasicOutputBuffer;
@@ -56,7 +58,20 @@ public class BsonData {
         BsonDocument doc = null;
         doc = new BsonDocument();
         doc.put("$json", x);
-        return doc.toJson(JsonWriterSettings.builder().indent(indent).build());
+        return doc.toJson(JsonWriterSettings.builder().indent(indent).build())
+                .replaceAll("\r\n", "\n");
+    }
+
+    public static String ToFlatJson(BsonValue x, boolean indent) {
+        BsonDocument doc = null;
+        if (x instanceof BsonDocument) {
+            doc = (BsonDocument) x;
+        } else {
+            doc = new BsonDocument();
+            doc.put("$json", x);
+        }
+        return doc.toJson(JsonWriterSettings.builder().indent(indent).build())
+                .replaceAll("\r\n", "\n");
     }
 
     public static BsonValue FromJson(String json) {
@@ -67,44 +82,13 @@ public class BsonData {
         return doc;
     }
 
-    public static BsonDocument NewArray() {
-        return new BsonDocument();
-    }
-
-    public static BsonArray NewObject() {
+    public static BsonArray NewOArray() {
         return new BsonArray();
     }
 
-    /*
-    public static void Print(Object val) {
-        Print(val, null);
+    public static BsonDocument NewObject() {
+        return new BsonDocument();
     }
-    */
-
-    /*
-    public static void Print(Object val, String title) {
-        if (title != null) System.out.printf("%s: ", title);
-        Object x = null;
-        if (val instanceof BsonValue) {
-            var doc = new BsonDocument();
-            doc.put("?", (BsonValue) val);
-            String json = ToJson(doc, false);
-            JSONObject obj = new JSONObject(json);
-            x = obj.get("?");
-        } else {
-            x = val;
-        }
-        String result = "";
-        if (x == null) result = "null";
-        else if (x instanceof JsonNull) result = "null";
-        else if (x instanceof JSONArray) result = ((JSONArray) x).toString(2);
-        else if (x instanceof JSONObject) result = ((JSONObject) x).toString(2);
-        else result = x.toString();
-        if (val != null)
-            result = "<" + val.getClass().getSimpleName() + "> " + result;
-        System.out.println(result);
-    }
-    */
 
     public static BsonValue ToValue(Object x) {
         if (x == null) return new BsonNull();
@@ -133,33 +117,7 @@ public class BsonData {
             }
             return result;
         }
-        /*
-        if (x instanceof JSONArray) {
-            JSONArray array = (JSONArray) x;
-            BsonArray result = new BsonArray();
-            for (int i = 0; i < array.length(); i++) {
-                if (array.isNull(i))
-                    result.add(ToValue(null));
-                else
-                    result.add(ToValue(array.get(i)));
-            }
-            return result;
-        }
-        if (x instanceof JSONObject) {
-            JSONObject object = (JSONObject) x;
-            BsonDocument result = new BsonDocument();
-            Object[] keys = object.keySet().toArray();
-            for (int i = 0; i < keys.length; i++) {
-                if (object.isNull((String) keys[i]))
-                    result.put((String) keys[i], ToValue(null));
-                else
-                    result.put((String) keys[i], ToValue(object.get((String) keys[i])));
-            }
-            return result;
-        }
-        */
         throw new RuntimeException(x.getClass().getName());
-        //return null;
     }
 
     public static Object FromValue(BsonValue x) {

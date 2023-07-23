@@ -13,6 +13,10 @@ public class Sys {
         return BsonData.ToJson(BsonData.ToValue(x), true);
     }
 
+    public static String toFlatJson(Object x) {
+        return BsonData.ToFlatJson(BsonData.ToValue(x), true);
+    }
+
     public static Object fromJson(String json) {
         return BsonData.FromValue(BsonData.FromJson(json));
     }

@@ -114,6 +114,10 @@ public class GroovyVM {
         return Sys.toJson(x);
     }
 
+    public String toFlatJson(Object x) {
+        return Sys.toFlatJson(x);
+    }
+
     public Object fromJson(String json) {
         return Sys.fromJson(json);
     }

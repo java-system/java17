@@ -87,12 +87,6 @@ public class Dynamic {
         list.set(index, strip(x));
     }
 
-    /*
-    public void putAt(Dynamic index, Object x) {
-        putAt(index.asInt(), x);
-    }
-    */
-
     public static Dynamic newMap(Object[] args) {
         java.util.Map<String, Object> result = new java.util.HashMap<String, Object>();
         for (int i = 0; i < args.length; i += 2) {
@@ -114,7 +108,10 @@ public class Dynamic {
     public Dynamic get(String key, Object fallback) {
         java.util.Map<String, Object> map = (java.util.Map<String, Object>) this.value;
         if (!map.containsKey(key)) {
-            map.put(key, strip(fallback));
+            try {
+                map.put(key, strip(fallback));
+            } catch (Exception e) {
+            }
             return wrap(fallback);
         }
         var result = map.get(key);
@@ -123,14 +120,14 @@ public class Dynamic {
     }
 
     public Dynamic get(String key) {
-        return get(key, null);
+        java.util.Map<String, Object> map = (java.util.Map<String, Object>) this.value;
+        if (!map.containsKey(key)) {
+            return null;
+        }
+        var result = map.get(key);
+        if (result == null) return null;
+        return new Dynamic(result);
     }
-
-    /*
-    public Dynamic get(Dynamic key) {
-        return get(key.asString());
-    }
-    */
 
     public void put(String key, Object x) {
         java.util.Map<String, Object> map = (java.util.Map<String, Object>) this.value;

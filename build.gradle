@@ -8,7 +8,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'com.github.java-system'
             artifactId = 'java17'
-            version = '2023.0724.1140'
+            version = '2023.0724.1848'
             from components.java
         }
     }

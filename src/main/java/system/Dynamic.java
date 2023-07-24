@@ -142,22 +142,26 @@ public class Dynamic {
     */
 
     public int asInt() {
-        if (this.value instanceof Integer) return (int) this.value;
-        return Integer.valueOf(this.value.toString());
+        //if (this.value instanceof Integer) return (int) this.value;
+        //return Integer.valueOf(this.value.toString());
+        return Sys.asInt(this.value);
     }
 
     public long asLong() {
-        if (this.value instanceof Long) return (long) this.value;
-        return Long.valueOf(this.value.toString());
+        //if (this.value instanceof Long) return (long) this.value;
+        //return Long.valueOf(this.value.toString());
+        return Sys.asLong(this.value);
     }
 
     public double asDouble() {
-        if (this.value instanceof Double) return (double) this.value;
-        return Double.valueOf(this.value.toString());
+        //if (this.value instanceof Double) return (double) this.value;
+        //return Double.valueOf(this.value.toString());
+        return Sys.asDouble(this.value);
     }
 
     public String asString() {
-        return this.value.toString();
+        //return this.value.toString();
+        return Sys.asString(this.value);
     }
 
     /*

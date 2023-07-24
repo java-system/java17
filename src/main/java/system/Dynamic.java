@@ -45,7 +45,7 @@ public class Dynamic {
     }
 
     public static Dynamic newList(Object[] args) {
-        java.util.List<Object> result = new java.util.ArrayList<Object>();
+        SimpleList result = new SimpleList();
         for (int i = 0; i < args.length; i++) {
             result.add(strip(args[i]));
         }

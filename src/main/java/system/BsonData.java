@@ -132,7 +132,7 @@ public class BsonData {
         if (x instanceof BsonBinary) return x.asBinary().getData();
         if (x instanceof BsonArray) {
             BsonArray array = x.asArray();
-            java.util.List<Object> result = new java.util.ArrayList<Object>();
+            SimpleList result = new SimpleList();
             for (int i = 0; i < array.size(); i++) {
                 result.add(FromValue(array.get(i)));
             }

@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.URL;
 
 public class Sys {
@@ -102,6 +103,38 @@ public class Sys {
 
     public static String readStringFromFile(String path, String fallback) throws Exception {
         return MiscUtil.ReadStringFromFile(path, fallback);
+    }
+
+    public static int asInt(Object x) {
+        if (x == null) throw new NullPointerException();
+        if (x instanceof Integer) return ((Integer) x).intValue();
+        if (x instanceof Long) return ((Long) x).intValue();
+        if (x instanceof Double) return ((Double) x).intValue();
+        if (x instanceof BigDecimal) return ((BigDecimal) x).intValue();
+        return Integer.valueOf(x.toString());
+    }
+
+    public static long asLong(Object x) {
+        if (x == null) throw new NullPointerException();
+        if (x instanceof Integer) return ((Integer) x).longValue();
+        if (x instanceof Long) return ((Long) x).longValue();
+        if (x instanceof Double) return ((Double) x).longValue();
+        if (x instanceof BigDecimal) return ((BigDecimal) x).longValue();
+        return Long.valueOf(x.toString());
+    }
+
+    public static double asDouble(Object x) {
+        if (x == null) throw new NullPointerException();
+        if (x instanceof Integer) return ((Integer) x).doubleValue();
+        if (x instanceof Long) return ((Long) x).doubleValue();
+        if (x instanceof Double) return ((Double) x).doubleValue();
+        if (x instanceof BigDecimal) return ((BigDecimal) x).doubleValue();
+        return Double.valueOf(x.toString());
+    }
+
+    public static String asString(Object x) {
+        if (x == null) throw new NullPointerException();
+        return x.toString();
     }
 
 }

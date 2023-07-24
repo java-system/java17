@@ -22,6 +22,27 @@ class GroovyVMTest {
     assertEquals("{\n" +
             "  \"$json\": 33\n" +
             "}", vm.toFlatJson(result2));
+
+    int intVar = vm.evalAsInt("123.45");
+    vm.echo(intVar);
+    assertEquals(123, intVar);
+
+    intVar = vm.evalAsInt("123.45D");
+    vm.echo(intVar);
+    assertEquals(123, intVar);
+
+    intVar = vm.evalAsInt("12345L");
+    vm.echo(intVar);
+    assertEquals(12345, intVar);
+
+    intVar = vm.evalAsInt("'12345'");
+    vm.echo(intVar);
+    assertEquals(12345, intVar);
+
+    String strVar = vm.evalAsString("123.45");
+    vm.echo(strVar);
+    assertEquals("123.45", strVar);
+
   }
 
 }

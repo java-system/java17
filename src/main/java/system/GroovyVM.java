@@ -75,6 +75,22 @@ public class GroovyVM {
         return run(script, args);
     }
 
+    public int evalAsInt(String script, Object... args) throws Exception {
+        return Sys.asInt(run(script, args));
+    }
+
+    public long evalAsLong(String script, Object... args) throws Exception {
+        return Sys.asLong(run(script, args));
+    }
+
+    public double evalAsDouble(String script, Object... args) throws Exception {
+        return Sys.asDouble(run(script, args));
+    }
+
+    public String evalAsString(String script, Object... args) throws Exception {
+        return Sys.asString(run(script, args));
+    }
+
     public Object __eval__(String script, Object... args) {
         try {
             return run(script, args);

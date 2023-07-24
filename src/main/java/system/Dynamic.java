@@ -88,7 +88,7 @@ public class Dynamic {
     }
 
     public static Dynamic newMap(Object[] args) {
-        java.util.Map<String, Object> result = new java.util.HashMap<String, Object>();
+        SimpleMap result = new SimpleMap();
         for (int i = 0; i < args.length; i += 2) {
             result.put((String) strip(args[i]), strip(args[i + 1]));
         }

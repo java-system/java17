@@ -43,6 +43,18 @@ class GroovyVMTest {
     vm.echo(strVar);
     assertEquals("123.45", strVar);
 
+    var list = new SimpleList() {
+      {
+        add(11);
+        add("abc");
+        add(null);
+      }
+    };
+    int listLen = vm.evalAsInt("_0.size()", list);
+    assertEquals(3, listLen);
+    for (int i=0; i<vm.evalAsInt("_0.size()", list); i++) {
+      vm.echo(vm.eval("_0[_1]", list, i));
+    }
   }
 
 }

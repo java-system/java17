@@ -37,6 +37,7 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
     testImplementation 'org.codehaus.groovy:groovy-all:3.0.18'
+
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-main-kts
     testImplementation 'org.jetbrains.kotlin:kotlin-main-kts:1.9.0'
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-scripting-jsr223

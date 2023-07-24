@@ -30,8 +30,7 @@ public class GroovyVM {
         }
     }
 
-    public void setVariable(String name, Object x) {
-        //this.binding.setVariable(name, x);
+    public void setVariable(String name, Object x) throws Exception {
         try {
             Method setVariableMethod = this.bindingClass.getMethod("setVariable", String.class, Object.class);
             setVariableMethod.invoke(this.binding, name, x);
@@ -40,8 +39,7 @@ public class GroovyVM {
         }
     }
 
-    public Object getVariable(String name) {
-        //return this.binding.getVariable(name);
+    public Object getVariable(String name) throws Exception {
         try {
             Method getVariableMethod = this.bindingClass.getMethod("getVariable", String.class);
             return getVariableMethod.invoke(this.binding, name);
@@ -50,8 +48,7 @@ public class GroovyVM {
         }
     }
 
-    public boolean hasVariable(String name) {
-        //return this.binding.hasVariable(name);
+    public boolean hasVariable(String name) throws Exception {
         try {
             Method hasVariableMethod = this.bindingClass.getMethod("hasVariable", String.class);
             return (boolean)hasVariableMethod.invoke(this.binding, name);
@@ -60,18 +57,13 @@ public class GroovyVM {
         }
     }
 
-    private Object run(String script, Object[] args) {
+    private Object run(String script, Object[] args) throws Exception {
         for (int i = 0; i < args.length; i++) {
             this.setVariable("_" + i, args[i]);
         }
         try {
-            //return this.shell.evaluate(script);
-            try {
-                Method evaluateMethod = this.shellClass.getMethod("evaluate", String.class);
-                return evaluateMethod.invoke(this.shell, script);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            Method evaluateMethod = this.shellClass.getMethod("evaluate", String.class);
+            return evaluateMethod.invoke(this.shell, script);
         } finally {
             for (int i = 0; i < args.length; i++) {
                 this.setVariable("_" + i, null);
@@ -79,7 +71,7 @@ public class GroovyVM {
         }
     }
 
-    public Object eval(String script, Object... args) {
+    public Object eval(String script, Object... args) throws Exception {
         return run(script, args);
     }
 
@@ -128,63 +120,39 @@ public class GroovyVM {
         return Sys.newMap(args);
     }
 
-    public String readAsText(String path) {
-        try {
-            return Sys.readAsText(path);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public String readAsText(String path) throws Exception {
+        return Sys.readAsText(path);
     }
 
-    public Object readAsJson(String path) {
-        try {
-            return Sys.readAsJson(path);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public Object readAsJson(String path) throws Exception {
+        return Sys.readAsJson(path);
     }
 
-    public Object load(String path) {
-        try {
-            return eval(readAsText(path));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public Object load(String path) throws Exception {
+        return eval(readAsText(path));
     }
 
-    public void require(String path) {
-        try {
-            if (path.startsWith(":/")) {
-            } else if (path.startsWith("http:") || path.startsWith("https:")) {
-            } else {
-                path = new File(path).getAbsolutePath();
-            }
-            if (this.imported.containsKey(path)) {
-                long count = this.imported.get(path);
-                this.imported.put(path, count + 1);
-                return;
-            }
-            eval(readAsText(path));
-            this.imported.put(path, 1L);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public void require(String path) throws Exception {
+        if (path.startsWith(":/")) {
+        } else if (path.startsWith("http:") || path.startsWith("https:")) {
+        } else {
+            path = new File(path).getAbsolutePath();
         }
+        if (this.imported.containsKey(path)) {
+            long count = this.imported.get(path);
+            this.imported.put(path, count + 1);
+            return;
+        }
+        eval(readAsText(path));
+        this.imported.put(path, 1L);
     }
 
-    public void writeStringToFile(String path, String data) {
-        try {
-            Sys.writeStringToFile(path, data);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public void writeStringToFile(String path, String data) throws Exception {
+        Sys.writeStringToFile(path, data);
     }
 
-    public String readStringFromFile(String path, String fallback) {
-        try {
-            return Sys.readStringFromFile(path, fallback);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public String readStringFromFile(String path, String fallback) throws Exception {
+        return Sys.readStringFromFile(path, fallback);
     }
 
 }

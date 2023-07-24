@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class GroovyVMTest {
 
   @Test
-  void test() {
+  void test() throws Exception {
     GroovyVM vm = new GroovyVM();
     vm.echo(123);
     Dynamic result1 = Dynamic.wrap(vm.eval("[a: 777]"));

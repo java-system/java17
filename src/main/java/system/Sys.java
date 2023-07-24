@@ -64,16 +64,16 @@ public class Sys {
         echoJson(x, null);
     }
 
-    public static java.util.List<Object> newList(Object[] args) {
-        java.util.List<Object> result = new java.util.ArrayList<Object>();
+    public static SimpleList newList(Object[] args) {
+        SimpleList result = new SimpleList();
         for (int i = 0; i < args.length; i++) {
             result.add(args[i]);
         }
         return result;
     }
 
-    public static java.util.Map<String, Object> newMap(Object[] args) {
-        java.util.Map<String, Object> result = new java.util.LinkedHashMap<String, Object>();
+    public static SimpleMap newMap(Object[] args) {
+        SimpleMap result = new SimpleMap();
         for (int i = 0; i < args.length; i += 2) {
             result.put((String) args[i], args[i + 1]);
         }

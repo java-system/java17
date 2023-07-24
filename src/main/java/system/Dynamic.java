@@ -18,7 +18,8 @@ public class Dynamic {
     }
 
     public String type() {
-        return this.value.getClass().getName();
+        return Sys.getTypeNameString(this.value);
+        //return this.value.getClass().getName();
     }
 
     /*

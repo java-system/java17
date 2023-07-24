@@ -21,6 +21,15 @@ public class Sys {
         return BsonData.FromValue(BsonData.FromJson(json));
     }
 
+    protected static String getTypeNameString(Object x) {
+        if (x == null) return "null";
+        String result = "";
+        x = Dynamic.strip(x);
+        if (x instanceof SimpleList) return SimpleList.class.getName();
+        if (x instanceof SimpleMap) return SimpleMap.class.getName();
+        return x.getClass().getName();
+    }
+
     public static void echo(Object x, String title) {
         if (title != null) System.out.printf("%s: ", title);
         String result = "";
@@ -28,9 +37,9 @@ public class Sys {
         else result = x.toString();
         if (x != null) {
             if (x instanceof Dynamic)
-                result = "<Dynamic:" + Dynamic.strip(x).getClass().getName() + "> " + result;
+                result = "<Dynamic:" + getTypeNameString(x) /*Dynamic.strip(x).getClass().getName()*/ + "> " + result;
             else
-                result = "<" + x.getClass().getName() + "> " + result;
+                result = "<" + getTypeNameString(x) /*x.getClass().getName()*/ + "> " + result;
         }
         System.out.println(result);
     }
@@ -44,9 +53,9 @@ public class Sys {
         String result = toJson(x);
         if (x != null) {
             if (x instanceof Dynamic)
-                result = "<Dynamic:" + Dynamic.strip(x).getClass().getName() + "> " + result;
+                result = "<Dynamic:" + getTypeNameString(x) /*Dynamic.strip(x).getClass().getName()*/ + "> " + result;
             else
-                result = "<" + x.getClass().getName() + "> " + result;
+                result = "<" + getTypeNameString(x) /*x.getClass().getName()*/ + "> " + result;
         }
         System.out.println(result);
     }

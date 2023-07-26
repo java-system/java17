@@ -3,6 +3,7 @@ package system;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,6 +57,9 @@ class SysTest {
         dec = Sys.asDecimal(123.45f);
         assertEquals("{\"$json\": {\"$numberDecimal\": \"123.45\"}}", Sys.toJson(dec, false));
 
+        byte[] bytes = "ハロー©".getBytes(StandardCharsets.UTF_8);
+        assertEquals(bytes, Sys.asBytes(bytes));
+        assertThrows(IllegalArgumentException.class, () -> Sys.asBytes(1234));
     }
 
 }

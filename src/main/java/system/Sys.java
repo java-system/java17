@@ -210,4 +210,11 @@ public class Sys {
         return result;
     }
 
+    public static byte[] asBytes(Object x) {
+        x = Dynamic.strip(x);
+        if (x == null) throw new NullPointerException();
+        if (x instanceof byte[]) return (byte[]) x;
+        throw new IllegalArgumentException();
+    }
+
 }

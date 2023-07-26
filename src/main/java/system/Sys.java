@@ -2,6 +2,7 @@ package system;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.joda.time.DateTime;
 
 import java.io.File;
 import java.io.InputStream;
@@ -9,6 +10,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class Sys {
 
@@ -107,8 +113,7 @@ public class Sys {
         return MiscUtil.ReadStringFromFile(path, fallback);
     }
 
-    protected static Method getConversionMethod(Object x, String name, Class<?> returnClass)
-    {
+    protected static Method getConversionMethod(Object x, String name, Class<?> returnClass) {
         //Sys.echo(x, "x");
         Class<?> xClass = x.getClass();
         //Sys.echo(xClass, "xClass");
@@ -124,10 +129,12 @@ public class Sys {
     }
 
     public static int asInt(Object x) {
+        if (x == null) throw new NullPointerException();
+        if (x instanceof Date) return Sys.asInt(((Date) x).getTime());
         Method m = getConversionMethod(x, "intValue", int.class);
         if (m != null) {
             try {
-                return (int)m.invoke(x);
+                return (int) m.invoke(x);
             } catch (IllegalAccessException e) {
             } catch (InvocationTargetException e) {
             }
@@ -136,10 +143,12 @@ public class Sys {
     }
 
     public static long asLong(Object x) {
+        if (x == null) throw new NullPointerException();
+        if (x instanceof Date) return ((Date) x).getTime();
         Method m = getConversionMethod(x, "longValue", long.class);
         if (m != null) {
             try {
-                return (long)m.invoke(x);
+                return (long) m.invoke(x);
             } catch (IllegalAccessException e) {
             } catch (InvocationTargetException e) {
             }
@@ -148,10 +157,12 @@ public class Sys {
     }
 
     public static double asDouble(Object x) {
+        if (x == null) throw new NullPointerException();
+        if (x instanceof Date) return Sys.asDouble(((Date) x).getTime());
         Method m = getConversionMethod(x, "doubleValue", double.class);
         if (m != null) {
             try {
-                return (double)m.invoke(x);
+                return (double) m.invoke(x);
             } catch (IllegalAccessException e) {
             } catch (InvocationTargetException e) {
             }
@@ -161,7 +172,27 @@ public class Sys {
 
     public static String asString(Object x) {
         if (x == null) throw new NullPointerException();
+        if (x instanceof Date) {
+            TimeZone tz = TimeZone.getTimeZone("UTC");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+            df.setTimeZone(tz);
+            String result = df.format(new Date());
+            return result;
+        }
         return x.toString();
+    }
+
+    public static Date asDate(Object x) {
+        if (x == null) throw new NullPointerException();
+        if (x instanceof Date) return (Date) x;
+        if ((x instanceof Integer) || (x instanceof Long) || (x instanceof Double)) {
+            long time = Sys.asLong(x);
+            Date result = new Date();
+            result.setTime(time);
+            return result;
+        }
+        Date result = org.joda.time.DateTime.parse(x.toString()).toDate();
+        return result;
     }
 
 }

@@ -3,6 +3,7 @@ package system;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,6 +33,20 @@ class SysTest {
         assertEquals(123, Sys.asInt(s));
         assertEquals(123, Sys.asLong(s));
         assertEquals(123.45, Sys.asDouble(s));
+
+        Date now = new Date();
+        Sys.echo(now, "now");
+        String nowStr = Sys.asString(now);
+        Sys.echo(nowStr, "nowStr");
+        Date now2 = Sys.asDate(nowStr);
+        Sys.echo(now2, "now2");
+        assertEquals(now.toString(), now2.toString());
+        assertEquals(Sys.asString(now), Sys.asString(now2));
+
+        long nowLong = Sys.asLong(now);
+        Date now3 = Sys.asDate(nowLong);
+        assertEquals(now.toString(), now3.toString());
+        assertEquals(Sys.asString(now), Sys.asString(now3));
 
     }
 

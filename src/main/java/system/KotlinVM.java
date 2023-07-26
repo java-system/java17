@@ -55,7 +55,7 @@ public class KotlinVM {
     }
 
     public String toJson(Object x) {
-        return Sys.toJson(x);
+        return Sys.toJson(x, true);
     }
 
     public Object fromJson(String json) {

@@ -18,12 +18,12 @@ import java.util.TimeZone;
 
 public class Sys {
 
-    public static String toJson(Object x) {
-        return BsonData.ToJson(BsonData.ToValue(x), true);
+    public static String toJson(Object x, boolean indent) {
+        return BsonData.ToJson(BsonData.ToValue(x), indent);
     }
 
-    public static String toFlatJson(Object x) {
-        return BsonData.ToFlatJson(BsonData.ToValue(x), true);
+    public static String toFlatJson(Object x, boolean indent) {
+        return BsonData.ToFlatJson(BsonData.ToValue(x), indent);
     }
 
     public static Object fromJson(String json) {
@@ -59,7 +59,7 @@ public class Sys {
 
     public static void echoJson(Object x, String title) {
         if (title != null) System.out.printf("%s: ", title);
-        String result = toJson(x);
+        String result = toJson(x, true);
         if (x != null) {
             if (x instanceof Dynamic)
                 result = "<Dynamic:" + getTypeNameString(x) /*Dynamic.strip(x).getClass().getName()*/ + "> " + result;
@@ -168,6 +168,15 @@ public class Sys {
             }
         }
         return new BigDecimal(x.toString()).doubleValue();
+    }
+
+    public static BigDecimal asDecimal(Object x) {
+        if (x == null) throw new NullPointerException();
+        if (x instanceof BigDecimal) return (BigDecimal) x;
+        if (x instanceof Integer) return new BigDecimal((Integer) x);
+        if (x instanceof Long) return new BigDecimal((Long) x);
+        if (x instanceof Double) return new BigDecimal((Double) x);
+        return new BigDecimal(x.toString());
     }
 
     public static String asString(Object x) {

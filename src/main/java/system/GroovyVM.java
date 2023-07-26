@@ -117,11 +117,11 @@ public class GroovyVM {
     }
 
     public String toJson(Object x) {
-        return Sys.toJson(x);
+        return Sys.toJson(x, true);
     }
 
     public String toFlatJson(Object x) {
-        return Sys.toFlatJson(x);
+        return Sys.toFlatJson(x, true);
     }
 
     public Object fromJson(String json) {

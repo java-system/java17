@@ -129,6 +129,7 @@ public class Sys {
     }
 
     public static int asInt(Object x) {
+        x = Dynamic.strip(x);
         if (x == null) throw new NullPointerException();
         if (x instanceof Date) return Sys.asInt(((Date) x).getTime());
         Method m = getConversionMethod(x, "intValue", int.class);
@@ -143,6 +144,7 @@ public class Sys {
     }
 
     public static long asLong(Object x) {
+        x = Dynamic.strip(x);
         if (x == null) throw new NullPointerException();
         if (x instanceof Date) return ((Date) x).getTime();
         Method m = getConversionMethod(x, "longValue", long.class);
@@ -157,6 +159,7 @@ public class Sys {
     }
 
     public static double asDouble(Object x) {
+        x = Dynamic.strip(x);
         if (x == null) throw new NullPointerException();
         if (x instanceof Date) return Sys.asDouble(((Date) x).getTime());
         Method m = getConversionMethod(x, "doubleValue", double.class);
@@ -171,6 +174,7 @@ public class Sys {
     }
 
     public static BigDecimal asDecimal(Object x) {
+        x = Dynamic.strip(x);
         if (x == null) throw new NullPointerException();
         if (x instanceof BigDecimal) return (BigDecimal) x;
         if (x instanceof Integer) return new BigDecimal((Integer) x);
@@ -180,6 +184,7 @@ public class Sys {
     }
 
     public static String asString(Object x) {
+        x = Dynamic.strip(x);
         if (x == null) throw new NullPointerException();
         if (x instanceof Date) {
             TimeZone tz = TimeZone.getTimeZone("UTC");
@@ -192,6 +197,7 @@ public class Sys {
     }
 
     public static Date asDate(Object x) {
+        x = Dynamic.strip(x);
         if (x == null) throw new NullPointerException();
         if (x instanceof Date) return (Date) x;
         if ((x instanceof Integer) || (x instanceof Long) || (x instanceof Double)) {

@@ -5,6 +5,8 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.URL;
 
@@ -105,31 +107,56 @@ public class Sys {
         return MiscUtil.ReadStringFromFile(path, fallback);
     }
 
+    protected static Method getConversionMethod(Object x, String name, Class<?> returnClass)
+    {
+        //Sys.echo(x, "x");
+        Class<?> xClass = x.getClass();
+        //Sys.echo(xClass, "xClass");
+        //Sys.echo(returnClass, "returnClass");
+        try {
+            Method m = xClass.getMethod(name);
+            //Sys.echo(m.getReturnType(), "m.getReturnType()");
+            if (m.getReturnType() != returnClass) return null;
+            return m;
+        } catch (NoSuchMethodException e) {
+            return null;
+        }
+    }
+
     public static int asInt(Object x) {
-        if (x == null) throw new NullPointerException();
-        if (x instanceof Integer) return ((Integer) x).intValue();
-        if (x instanceof Long) return ((Long) x).intValue();
-        if (x instanceof Double) return ((Double) x).intValue();
-        if (x instanceof BigDecimal) return ((BigDecimal) x).intValue();
-        return Integer.valueOf(x.toString());
+        Method m = getConversionMethod(x, "intValue", int.class);
+        if (m != null) {
+            try {
+                return (int)m.invoke(x);
+            } catch (IllegalAccessException e) {
+            } catch (InvocationTargetException e) {
+            }
+        }
+        return new BigDecimal(x.toString()).intValue();
     }
 
     public static long asLong(Object x) {
-        if (x == null) throw new NullPointerException();
-        if (x instanceof Integer) return ((Integer) x).longValue();
-        if (x instanceof Long) return ((Long) x).longValue();
-        if (x instanceof Double) return ((Double) x).longValue();
-        if (x instanceof BigDecimal) return ((BigDecimal) x).longValue();
-        return Long.valueOf(x.toString());
+        Method m = getConversionMethod(x, "longValue", long.class);
+        if (m != null) {
+            try {
+                return (long)m.invoke(x);
+            } catch (IllegalAccessException e) {
+            } catch (InvocationTargetException e) {
+            }
+        }
+        return new BigDecimal(x.toString()).longValue();
     }
 
     public static double asDouble(Object x) {
-        if (x == null) throw new NullPointerException();
-        if (x instanceof Integer) return ((Integer) x).doubleValue();
-        if (x instanceof Long) return ((Long) x).doubleValue();
-        if (x instanceof Double) return ((Double) x).doubleValue();
-        if (x instanceof BigDecimal) return ((BigDecimal) x).doubleValue();
-        return Double.valueOf(x.toString());
+        Method m = getConversionMethod(x, "doubleValue", double.class);
+        if (m != null) {
+            try {
+                return (double)m.invoke(x);
+            } catch (IllegalAccessException e) {
+            } catch (InvocationTargetException e) {
+            }
+        }
+        return new BigDecimal(x.toString()).doubleValue();
     }
 
     public static String asString(Object x) {

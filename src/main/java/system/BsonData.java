@@ -13,6 +13,7 @@ import org.bson.json.JsonWriterSettings;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Set;
 
 public class BsonData {
     public static byte[] EncodeToBytes(BsonDocument doc) {
@@ -38,14 +39,14 @@ public class BsonData {
 
     private static BsonValue DecodeFromBytes_Helper(BsonValue x) {
         if (x.isDocument()) {
-            var result = new BsonDocument();
-            var keys = x.asDocument().keySet();
-            for (var key : keys) {
+            BsonDocument result = new BsonDocument();
+            Set<String> keys = x.asDocument().keySet();
+            for (String key : keys) {
                 result.put(key, DecodeFromBytes_Helper(x.asDocument().get(key)));
             }
             return result;
         } else if (x.isArray()) {
-            var result = new BsonArray();
+            BsonArray result = new BsonArray();
             for (int i = 0; i < x.asArray().size(); i++) {
                 result.set(i, DecodeFromBytes_Helper(x.asArray().get(i)));
             }

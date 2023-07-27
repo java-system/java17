@@ -5,6 +5,9 @@ import org.bson.BsonDocument;
 import org.bson.BsonNull;
 import org.bson.BsonValue;
 
+import java.util.List;
+import java.util.Map;
+
 public class Dynamic {
     protected Object value = null;
 
@@ -98,8 +101,8 @@ public class Dynamic {
 
     public Dynamic keys() {
         java.util.Map<String, Object> map = (java.util.Map<String, Object>) this.value;
-        var keys = map.keySet().toArray();
-        var result = newList(new Object[] {});
+        Object[] keys = map.keySet().toArray();
+        Dynamic result = newList(new Object[]{});
         for (int i = 0; i < keys.length; i++) {
             result.add(keys[i]);
         }
@@ -115,7 +118,7 @@ public class Dynamic {
             }
             return wrap(fallback);
         }
-        var result = map.get(key);
+        Object result = map.get(key);
         if (result == null) return null;
         return new Dynamic(result);
     }
@@ -125,7 +128,7 @@ public class Dynamic {
         if (!map.containsKey(key)) {
             return null;
         }
-        var result = map.get(key);
+        Object result = map.get(key);
         if (result == null) return null;
         return new Dynamic(result);
     }
@@ -172,8 +175,8 @@ public class Dynamic {
 
     public static BsonValue toBsonValue(Dynamic x) {
         if (x instanceof java.util.List<?>) {
-            var list = (java.util.List<Object>) x;
-            var result = new BsonArray();
+            List<Object> list = (List<Object>) x;
+            BsonArray result = new BsonArray();
             for (int i=0; i<list.size(); i++) {
                 if (list.get(i) == null)
                     result.add(new BsonNull());
@@ -183,9 +186,9 @@ public class Dynamic {
             return result;
         }
         if (x instanceof java.util.Map<?, ?>) {
-            var map = (java.util.Map<String, Object>) x;
-            var result = new BsonDocument();
-            var keys = map.keySet().toArray();
+            Map<String, Object> map = (Map<String, Object>) x;
+            BsonDocument result = new BsonDocument();
+            Object[] keys = map.keySet().toArray();
             for (int i=0; i<keys.length; i++) {
                 if (map.get(keys[i]) == null)
                     result.put((String)keys[i], new BsonNull());
@@ -199,23 +202,23 @@ public class Dynamic {
 
     public static Dynamic fromBsonValue(BsonValue x) {
         if (x instanceof BsonArray) {
-            var array = (BsonArray)x;
-            var result = newList(new Object[] {});
+            BsonArray array = (BsonArray) x;
+            Dynamic result = newList(new Object[]{});
             for (int i=0; i<array.size(); i++) {
                 result.add(fromBsonValue(array.get(i)));
             }
             return result;
         }
         if (x instanceof BsonDocument) {
-            var doc = (BsonDocument)x;
-            var result = newMap(new Object[] {});
-            var keys = doc.keySet().toArray();
+            BsonDocument doc = (BsonDocument) x;
+            Dynamic result = newMap(new Object[]{});
+            Object[] keys = doc.keySet().toArray();
             for (int i=0; i<keys.length; i++) {
                 result.put((String)keys[i], fromBsonValue(doc.get((String)keys[i])));
             }
             return result;
         }
-        var val = BsonData.FromValue(x);
+        Object val = BsonData.FromValue(x);
         if (val == null) return null;
         return new Dynamic(val);
     }

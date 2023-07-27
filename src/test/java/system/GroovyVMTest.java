@@ -43,7 +43,7 @@ class GroovyVMTest {
     vm.echo(strVar);
     assertEquals("123.45", strVar);
 
-    var list = new SimpleList() {
+    SimpleList list = new SimpleList() {
       {
         add(11);
         add("abc");

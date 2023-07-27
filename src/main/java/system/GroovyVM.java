@@ -1,60 +1,33 @@
 package system;
 
-//import groovy.lang.Binding;
-//import groovy.lang.GroovyShell;
+import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 
 public class GroovyVM {
 
-    protected Class<?> bindingClass = null;
-    protected Object binding = null;
-    protected Class<?> shellClass = null;
-    protected Object shell = null;
+    protected groovy.lang.Binding binding = null;
+    protected groovy.lang.GroovyShell shell = null;
 
     public java.util.Map<String, Long> imported = new java.util.LinkedHashMap<String, Long>();
 
     public GroovyVM() {
-        try {
-            this.bindingClass = Class.forName("groovy.lang.Binding");
-            this.binding = bindingClass.newInstance();
-            Method setPropertyMethod = bindingClass.getMethod("setProperty", String.class, Object.class);
-            setPropertyMethod.invoke(this.binding, "vm", this);
-            this.shellClass = Class.forName("groovy.lang.GroovyShell");
-            Constructor<?> shellCons = this.shellClass.getConstructor(ClassLoader.class, bindingClass);
-            this.shell = shellCons.newInstance(Thread.currentThread().getContextClassLoader(), this.binding);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        this.binding = new Binding();
+        this.binding.setProperty("vm", this);
+        this.shell = new GroovyShell(Thread.currentThread().getContextClassLoader(), this.binding);
     }
 
-    public void setVariable(String name, Object x) throws Exception {
-        try {
-            Method setVariableMethod = this.bindingClass.getMethod("setVariable", String.class, Object.class);
-            setVariableMethod.invoke(this.binding, name, x);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public void setVariable(String name, Object x) {
+        this.binding.setVariable(name, x);
     }
 
-    public Object getVariable(String name) throws Exception {
-        try {
-            Method getVariableMethod = this.bindingClass.getMethod("getVariable", String.class);
-            return getVariableMethod.invoke(this.binding, name);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public Object getVariable(String name) {
+        return this.binding.getVariable(name);
     }
 
-    public boolean hasVariable(String name) throws Exception {
-        try {
-            Method hasVariableMethod = this.bindingClass.getMethod("hasVariable", String.class);
-            return (boolean)hasVariableMethod.invoke(this.binding, name);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public boolean hasVariable(String name) {
+        return this.binding.hasVariable(name);
     }
 
     private Object run(String script, Object[] args) throws Exception {
@@ -62,8 +35,7 @@ public class GroovyVM {
             this.setVariable("_" + i, args[i]);
         }
         try {
-            Method evaluateMethod = this.shellClass.getMethod("evaluate", String.class);
-            return evaluateMethod.invoke(this.shell, script);
+            return this.shell.evaluate(script);
         } finally {
             for (int i = 0; i < args.length; i++) {
                 this.setVariable("_" + i, null);

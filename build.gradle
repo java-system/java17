@@ -8,7 +8,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'com.github.java-system'
             artifactId = 'java17'
-            version = '2023.0724.1848'
+            version = '2023.0729.0822'
             from components.java
         }
     }
@@ -36,7 +36,12 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
-    testImplementation 'org.codehaus.groovy:groovy-all:3.0.18'
+    //compileOnly 'org.codehaus.groovy:groovy-all:3.0.18'
+    //testImplementation 'org.codehaus.groovy:groovy-all:3.0.18'
+
+    // https://mvnrepository.com/artifact/org.apache.groovy/groovy
+    compileOnly 'org.apache.groovy:groovy:4.0.13'
+    testImplementation 'org.apache.groovy:groovy:4.0.13'
 
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-main-kts
     testImplementation 'org.jetbrains.kotlin:kotlin-main-kts:1.9.0'

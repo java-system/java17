@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -215,6 +216,16 @@ public class Sys {
         if (x == null) throw new NullPointerException();
         if (x instanceof byte[]) return (byte[]) x;
         throw new IllegalArgumentException();
+    }
+
+    public static void pause() {
+        if (System.getProperty("java.application.path") != null) {
+            System.err.print("Hit Enter to Continue: ");
+            try {
+                System.in.read();
+            } catch (IOException e) {
+            }
+        }
     }
 
 }

@@ -220,7 +220,8 @@ public class Sys {
 
     public static void pause() {
         if (System.getProperty("java.application.path") != null) {
-            System.err.print("Hit Enter to Continue: ");
+            System.out.print("Hit Enter to Continue: ");
+            System.out.flush();
             try {
                 System.in.read();
             } catch (IOException e) {

@@ -31,7 +31,7 @@ public class VM {
 		this.eval("globalThis.console = { log: globalThis.echo }");
 		this.setGlobal("$vm", this);
 		this.eval("globalThis.echo = function(x, title) { $vm.echo(x, title===undefined?null:title); }");
-		this.eval("globalThis.load = function(path) { return $vm.loadFile(path); }");
+		this.eval("globalThis.load = function(path) { return $vm.load(path); }");
 		this.eval("globalThis.vm = { echo: globalThis.echo, load: globalThis.load }");
 	}
 
@@ -43,7 +43,7 @@ public class VM {
 	public Object runWithPath(String path, String script, Object[] args) {
 		Scriptable scope = context.initStandardObjects(global);
 		for (int i = 0; i < args.length; i++) {
-			ScriptableObject.putProperty(scope, "$" + i, toNative(args[i]));
+			ScriptableObject.putProperty(scope, "_" + i, toNative(args[i]));
 		}
 		return context.evaluateString(scope, script, path, 1, null);
 	}
@@ -85,7 +85,7 @@ public class VM {
 		if (x instanceof String) {
 			System.out.println(x);
 		} else {
-			String json = (String) eval("JSON.stringify($0, null, 2)", x);
+			String json = (String) eval("JSON.stringify(_0, null, 2)", x);
 			System.out.println(json);
 		}
 	}
@@ -94,13 +94,13 @@ public class VM {
 		echo(x, null);
 	}
 
-	public Object load(String x) {
-		return this.eval("load($0)", x);
-	}
+	//public Object load(String x) {
+	//	return this.eval("load($0)", x);
+	//}
 
-	public Object loadToJson(String x) {
-		return this.evalToJson("load($0)", x);
-	}
+	//public Object loadToJson(String x) {
+	//	return this.evalToJson("load($0)", x);
+	//}
 
 	public Object toJson(Object x) {
 		if (x == null)
@@ -171,7 +171,7 @@ public class VM {
 		}
 	}
 
-	public Object loadFile(String path) throws Exception {
+	public Object load(String path) throws Exception {
 		return this.runWithPath(path, this.getSourceCode(path), new Object[] {});
 	}
 

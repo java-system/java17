@@ -12,7 +12,6 @@ import java.io.File;
 //import java.nio.charset.StandardCharsets;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.charset.Charset;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -29,12 +28,11 @@ public class VM {
 		this.global = new Global(context);
 		// スコープを初期化
 		ImporterTopLevel.init(context, global, true);
+		this.eval("globalThis.console = { log: globalThis.echo }");
 		this.setGlobal("$vm", this);
-		this.js("globalThis.print = function(x, title) { $vm.print(x, title===undefined?null:title); }");
-		this.js("globalThis.console = { log: globalThis.print }");
-		this.js("globalThis.load = function(path) { return $vm.loadFile(path); }");
-		this.js("globalThis.js = function() { var args=['<eval>']; for (var i=0; i<arguments.length; i++) args.push(arguments[i]); return $vm.runArray(args); }");
-		this.js("globalThis.jsWithPath = function() { var args=[]; for (var i=0; i<arguments.length; i++) args.push(arguments[i]); return $vm.runArray(args); }");
+		this.eval("globalThis.echo = function(x, title) { $vm.echo(x, title===undefined?null:title); }");
+		this.eval("globalThis.load = function(path) { return $vm.loadFile(path); }");
+		this.eval("globalThis.vm = { echo: globalThis.echo, load: globalThis.load }");
 	}
 
 	public Object setGlobal(String name, Object x) {
@@ -50,22 +48,23 @@ public class VM {
 		return context.evaluateString(scope, script, path, 1, null);
 	}
 
-	public Object js(String script, Object... args) {
+	public Object eval(String script, Object... args) {
 		return run_("<eval>", script, args);
 	}
 
-	public Object jsToJson(String script, Object... args) {
+	public Object evalToJson(String script, Object... args) {
 		return toJson(run_("<eval>", script, args));
 	}
 
-	public Object jsWithPath(String path, String script, Object... args) {
+	public Object evalWithPath(String path, String script, Object... args) {
 		return run_(path, script, args);
 	}
 
-	public Object jsToJsonWithPath(String path, String script, Object... args) {
+	public Object evalToJsonWithPath(String path, String script, Object... args) {
 		return toJson(run_(path, script, args));
 	}
 
+	/*
 	public Object runArray(Object x) {
 		org.mozilla.javascript.NativeArray ary = (org.mozilla.javascript.NativeArray)x;
 		String path = (String)ary.get(0);
@@ -76,6 +75,7 @@ public class VM {
 		}
 		return run_(path, script, args);
 	}
+    */
 
 	public void print(Object x, String title) {
 		if (title != null) {
@@ -86,7 +86,7 @@ public class VM {
 		if (x instanceof String) {
 			System.out.println(x);
 		} else {
-			String json = (String) js("JSON.stringify($0, null, 2)", x);
+			String json = (String) eval("JSON.stringify($0, null, 2)", x);
 			System.out.println(json);
 		}
 	}
@@ -96,11 +96,11 @@ public class VM {
 	}
 
 	public Object load(String x) {
-		return this.js("load($0)", x);
+		return this.eval("load($0)", x);
 	}
 
 	public Object loadToJson(String x) {
-		return this.jsToJson("load($0)", x);
+		return this.evalToJson("load($0)", x);
 	}
 
 	public Object toJson(Object x) {

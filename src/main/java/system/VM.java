@@ -22,6 +22,8 @@ public class VM {
 	public Context context;
 	public Global global;
 
+	public java.util.Map<String, Long> imported = new java.util.LinkedHashMap<String, Long>();
+
 	public VM() {
 		this.context = Context.enter();
 		// load、importPackage、print を使うために必要
@@ -174,8 +176,39 @@ public class VM {
 		}
 	}
 
+	public java.util.List<Object> newList(Object... args) {
+		return Sys.newList(args);
+	}
+
+	public java.util.Map<String, Object> newMap(Object... args) {
+		return Sys.newMap(args);
+	}
+
+	public String readAsText(String path) throws Exception {
+		return Sys.readAsText(path);
+	}
+
+	public Object readAsJson(String path) throws Exception {
+		return Sys.readAsJson(path);
+	}
+
 	public Object load(String path) throws Exception {
-		return this.runWithPath(path, this.getSourceCode(path), new Object[] {});
+		return eval(readAsText(path));
+	}
+
+	public void require(String path) throws Exception {
+		if (path.startsWith(":/")) {
+		} else if (path.startsWith("http:") || path.startsWith("https:")) {
+		} else {
+			path = new File(path).getAbsolutePath();
+		}
+		if (this.imported.containsKey(path)) {
+			long count = this.imported.get(path);
+			this.imported.put(path, count + 1);
+			return;
+		}
+		eval(readAsText(path));
+		this.imported.put(path, 1L);
 	}
 
 }

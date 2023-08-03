@@ -40,7 +40,7 @@ public class VM {
 		return ScriptableObject.getProperty(global, name);
 	}
 
-	private Object run_(String path, String script, Object[] args) {
+	public Object runWithPath(String path, String script, Object[] args) {
 		Scriptable scope = context.initStandardObjects(global);
 		for (int i = 0; i < args.length; i++) {
 			ScriptableObject.putProperty(scope, "$" + i, toNative(args[i]));
@@ -48,36 +48,35 @@ public class VM {
 		return context.evaluateString(scope, script, path, 1, null);
 	}
 
+	public Object run(String script, Object[] args) {
+		return runWithPath("<eval>", script, args);
+	}
+
 	public Object eval(String script, Object... args) {
-		return run_("<eval>", script, args);
+		return run(script, args);
 	}
 
 	public Object evalToJson(String script, Object... args) {
-		return toJson(run_("<eval>", script, args));
+		return toJson(run(script, args));
 	}
 
-	public Object evalWithPath(String path, String script, Object... args) {
-		return run_(path, script, args);
+	public int evalAsInt(String script, Object... args) throws Exception {
+		return Sys.asInt(run(script, args));
 	}
 
-	public Object evalToJsonWithPath(String path, String script, Object... args) {
-		return toJson(run_(path, script, args));
+	public long evalAsLong(String script, Object... args) throws Exception {
+		return Sys.asLong(run(script, args));
 	}
 
-	/*
-	public Object runArray(Object x) {
-		org.mozilla.javascript.NativeArray ary = (org.mozilla.javascript.NativeArray)x;
-		String path = (String)ary.get(0);
-		String script = (String)ary.get(1);
-		Object[] args = new Object[ary.size()-2];
-		for (int i=2; i<ary.size(); i++) {
-			args[i-2] = ary.get(i);
-		}
-		return run_(path, script, args);
+	public double evalAsDouble(String script, Object... args) throws Exception {
+		return Sys.asDouble(run(script, args));
 	}
-    */
 
-	public void print(Object x, String title) {
+	public String evalAsString(String script, Object... args) throws Exception {
+		return Sys.asString(run(script, args));
+	}
+
+	public void echo(Object x, String title) {
 		if (title != null) {
 			System.out.print(title);
 			System.out.print(": ");
@@ -91,8 +90,8 @@ public class VM {
 		}
 	}
 
-	public void print(Object x) {
-		print(x, null);
+	public void echo(Object x) {
+		echo(x, null);
 	}
 
 	public Object load(String x) {
@@ -173,7 +172,7 @@ public class VM {
 	}
 
 	public Object loadFile(String path) throws Exception {
-		return this.run_(path, this.getSourceCode(path), new Object[] {});
+		return this.runWithPath(path, this.getSourceCode(path), new Object[] {});
 	}
 
 }

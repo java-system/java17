@@ -77,6 +77,8 @@ public class VM {
 	}
 
 	public void echo(Object x, String title) {
+		Sys.echo(x, title);
+		/*
 		if (title != null) {
 			System.out.print(title);
 			System.out.print(": ");
@@ -88,6 +90,7 @@ public class VM {
 			String json = (String) eval("JSON.stringify(_0, null, 2)", x);
 			System.out.println(json);
 		}
+        */
 	}
 
 	public void echo(Object x) {

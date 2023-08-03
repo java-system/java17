@@ -65,7 +65,7 @@ public class Dynamic {
         java.util.List<Object> list = (java.util.List<Object>) this.value;
         Object result = list.get(index);
         if (result == null) {
-            list.set(index, strip(fallback));
+            //list.set(index, strip(fallback));
             return wrap(fallback);
         }
         return new Dynamic(result);
@@ -112,10 +112,12 @@ public class Dynamic {
     public Dynamic get(String key, Object fallback) {
         java.util.Map<String, Object> map = (java.util.Map<String, Object>) this.value;
         if (!map.containsKey(key)) {
+            /*
             try {
                 map.put(key, strip(fallback));
             } catch (Exception e) {
             }
+            */
             return wrap(fallback);
         }
         Object result = map.get(key);

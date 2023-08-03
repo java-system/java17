@@ -17,6 +17,10 @@ class VMTest {
 		for (int i=0; i<vm.evalAsInt("_0.length", result); i++) {
 			vm.eval("vm.echo(_0[_1])", result, i);
 		}
+		Dynamic dyn = Dynamic.wrap(result);
+		for (int i=0; i<dyn.size(); i++) {
+			vm.echo(dyn.getAt(i));
+		}
 		result = vm.eval("({a: 1, b: 2, c: null})");
 		assertTrue(result instanceof java.util.Map);
 		vm.eval("echo(`${_0}&${_1}`)", 111, 222);

@@ -50,6 +50,12 @@ class DynamicTest {
         Sys.echo(mapJson, "mapJson");
         var map2 = Sys.fromJson(mapJson);
         Sys.echo(map2, "map2");
+        var j1 = "{\"dt\": {\"$date\": \"2024-01-19T05:53:14.6951234Z\"}}";
+        var j1Obj = Sys.fromJson(j1);
+        Sys.echo(j1Obj, "j1Obj");
+        var j2 = "{\"dt\": {\"$date\": \"2024-01-19T05:53:14.6951234+09:00\"}}";
+        var j2Obj = Sys.fromJson(j2);
+        Sys.echo(j2Obj, "j2Obj");
     }
 
 }

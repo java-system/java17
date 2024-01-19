@@ -27,7 +27,11 @@ class DynamicTest {
         Sys.echo(listBson, "listBson");
         var list2 = Dynamic.fromBsonValue(listBson);
         Sys.echo(list2, "list2");
-        Dynamic map = Dynamic.newMap(new Object[]{list.getAt(1), "aaa", "xyz", 12.3, "dt", new Date()});
+        Dynamic map = Dynamic.newMap(new Object[]{
+                list.getAt(1), "aaa",
+                "xyz", 12.3, "dt",
+                new Date(), "bytes",
+                new byte[] {1, 2, 3}});
         Sys.echo(map);
         Dynamic keys = map.keys();
         Sys.echo(keys);
@@ -42,6 +46,10 @@ class DynamicTest {
         byte[] mapBytes2 = Files.readAllBytes(new File("C:/ProgramData/tmp.bson").toPath());
         var mapBson2 = BsonData.DecodeFromBytes(mapBytes2);
         Sys.echo(mapBson2, "mapBson2");
+        var mapJson = Sys.toJson(map, true);
+        Sys.echo(mapJson, "mapJson");
+        var map2 = Sys.fromJson(mapJson);
+        Sys.echo(map2, "map2");
     }
 
 }

@@ -64,6 +64,9 @@ dependencies {
     api 'joda-time:joda-time:2.12.5'
     // https://mvnrepository.com/artifact/org.json/json
     api 'org.json:json:20231013'
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents.core5/httpcore5
+    api 'org.apache.httpcomponents.core5:httpcore5:5.2.5'
+
 }
 
 archivesBaseName = 'noname'

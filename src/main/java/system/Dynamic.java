@@ -225,4 +225,11 @@ public class Dynamic {
         return new Dynamic(val);
     }
 
+    public String toJson(boolean indent) {
+        return Sys.toJson(toBsonValue(this), indent);
+    }
+    public static Dynamic fromJson(String json) {
+        return new Dynamic(Sys.fromJson(json));
+    }
+
 }

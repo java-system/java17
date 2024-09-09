@@ -23,7 +23,8 @@ class DynamicTest {
         for (int i=0; i<list.size(); i++) {
             Sys.echoJson(list.getAt(i), "" + i);
         }
-        var listBson = Dynamic.toBsonValue(list);
+        //var listBson = Dynamic.toBsonValue(list);
+        var listBson = list.toBsonValue();
         Sys.echo(listBson, "listBson");
         var list2 = Dynamic.fromBsonValue(listBson);
         Sys.echo(list2, "list2");
@@ -39,7 +40,7 @@ class DynamicTest {
             Sys.echo(keys.getAt(i));
             Sys.echo(map.get(keys.getAt(i).asString()));
         }
-        var mapBson = (BsonDocument)Dynamic.toBsonValue(map);
+        var mapBson = (BsonDocument)map.toBsonValue();
         Sys.echo(mapBson, "mapBson");
         var mapBytes = BsonData.EncodeToBytes(mapBson);
         Files.write(new File("C:/ProgramData/tmp.bson").toPath(), mapBytes);

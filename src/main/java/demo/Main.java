@@ -16,5 +16,6 @@ public class Main {
         Sys.echo(d);
         //d.asList().remove(0);
         Sys.echo(d.asMap().size(), "d.asMap().size()");
+        Sys.echo(d.toJson(true));
     }
 }

@@ -93,6 +93,9 @@ public class BsonData {
 
     public static BsonValue ToValue(Object x) {
         if (x == null) return new BsonNull();
+        if (x instanceof BsonDouble) return (BsonDouble) x;
+        if (x instanceof BsonInt32) return (BsonInt32) x;
+        if (x instanceof BsonInt64) return (BsonInt64) x;
         if (x instanceof Dynamic) x = Dynamic.strip(x);
         if (x instanceof Integer) return new BsonInt32((int) x);
         if (x instanceof Long) return new BsonInt64((long) x);

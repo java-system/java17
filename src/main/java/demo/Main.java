@@ -67,6 +67,7 @@ public class Main {
         }
 
         Path file = Paths.get("D:\\.repo\\base14\\nuget.org\\cs-globals\\Globals.Demo\\assets\\qiita-9ea0c8fd43b61b01a8da.json");
+        Dynamic qiitaObj = null;
         try {
             String text = Files.readString(file, Charset.forName("UTF-8"));
             Sys.echo(text);
@@ -75,7 +76,6 @@ public class Main {
             stopWatch.start();
             //1秒待機
             //Thread.sleep(1000);
-            Dynamic qiitaObj = null;
             for (int i=0; i<1; i++) {
                 qiitaObj = Dynamic.fromJson(text);
             }
@@ -88,5 +88,6 @@ public class Main {
             //throw new RuntimeException(e);
             e.printStackTrace();
         }
+        Sys.echo(qiitaObj.asMap().get("title"), "title");
     }
 }

@@ -2,6 +2,7 @@ package demo;
 
 //import org.apache.commons.lang3.time.StopWatch;
 //import org.apache.hc.core5.net.URIBuilder;
+
 import system.Dynamic;
 import system.Sys;
 
@@ -80,7 +81,7 @@ public class Main {
             stopWatch.start();
             //1秒待機
             //Thread.sleep(1000);
-            for (int i=0; i<1; i++) {
+            for (int i = 0; i < 1; i++) {
                 qiitaObj = Dynamic.fromJson(text);
             }
             //計測終了
@@ -93,9 +94,23 @@ public class Main {
             e.printStackTrace();
         }
         qiitaObj
+                .remove("coediting")
                 .remove("body")
-                .remove("rendered_body");
+                .remove("group")
+                .remove("organization_url_name")
+                .remove("private")
+                .remove("rendered_body")
+                .remove("team_membership")
+        ;
         qiitaObj.put("user", qiitaObj.get("user").get("id"));
+        String tags = "";
+        for (int i = 0; i < qiitaObj.get("tags").size(); i++) {
+            Sys.echo(qiitaObj.get("tags").getAt(i).get("name"));
+            if (i > 0) tags += "|";
+            tags += qiitaObj.get("tags").getAt(i).get("name").asString();
+        }
+        qiitaObj.put("tags", tags);
+        Sys.echo(tags);
         Sys.echo(qiitaObj);
         Sys.echoJson(qiitaObj);
         //Sys.echo(qiitaObj.asMap().get("title"), "title");

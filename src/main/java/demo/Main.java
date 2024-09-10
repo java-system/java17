@@ -1,5 +1,6 @@
 package demo;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.apache.hc.core5.net.URIBuilder;
 import system.Dynamic;
 import system.Sys;
@@ -10,6 +11,10 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Main {
     public static void main(String[] args) {
@@ -61,5 +66,27 @@ public class Main {
             e.printStackTrace();
         }
 
+        Path file = Paths.get("D:\\.repo\\base14\\nuget.org\\cs-globals\\Globals.Demo\\assets\\qiita-9ea0c8fd43b61b01a8da.json");
+        try {
+            String text = Files.readString(file, Charset.forName("UTF-8"));
+            Sys.echo(text);
+            StopWatch stopWatch = new StopWatch();
+            //計測スタート
+            stopWatch.start();
+            //1秒待機
+            //Thread.sleep(1000);
+            Dynamic qiitaObj = null;
+            for (int i=0; i<1; i++) {
+                qiitaObj = Dynamic.fromJson(text);
+            }
+            //計測終了
+            stopWatch.stop();
+            //結果を取得
+            Sys.echo(qiitaObj);
+            System.out.println(stopWatch.formatTime());
+        } catch (IOException e) {
+            //throw new RuntimeException(e);
+            e.printStackTrace();
+        }
     }
 }

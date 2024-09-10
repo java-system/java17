@@ -1,7 +1,7 @@
 package demo;
 
-import org.apache.commons.lang3.time.StopWatch;
-import org.apache.hc.core5.net.URIBuilder;
+//import org.apache.commons.lang3.time.StopWatch;
+//import org.apache.hc.core5.net.URIBuilder;
 import system.Dynamic;
 import system.Sys;
 
@@ -58,7 +58,7 @@ public class Main {
         String key = "article";
         String value = "alpha=beta";
         try {
-            URI uri = new URIBuilder(url).addParameter(key, value)
+            URI uri = new org.apache.hc.core5.net.URIBuilder(url).addParameter(key, value)
                     .build();
             Sys.echo(uri.toString());
         } catch (URISyntaxException e) {
@@ -70,7 +70,7 @@ public class Main {
         try {
             String text = Files.readString(file, Charset.forName("UTF-8"));
             Sys.echo(text);
-            StopWatch stopWatch = new StopWatch();
+            var stopWatch = new org.apache.commons.lang3.time.StopWatch();
             //計測スタート
             stopWatch.start();
             //1秒待機

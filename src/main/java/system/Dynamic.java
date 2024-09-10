@@ -100,6 +100,12 @@ public class Dynamic {
         list.set(index, strip(x));
     }
 
+    public Dynamic remove(int index) {
+        java.util.List<Object> list = (java.util.List<Object>) this.value;
+        list.remove(index);
+        return this;
+    }
+
     public static Dynamic newMap(Object[] args) {
         SimpleMap result = new SimpleMap();
         for (int i = 0; i < args.length; i += 2) {
@@ -156,6 +162,12 @@ public class Dynamic {
     public void put(String key, Object x) {
         java.util.Map<String, Object> map = (java.util.Map<String, Object>) this.value;
         map.put(key, strip(x));
+    }
+
+    public Dynamic remove(String key) {
+        java.util.Map<String, Object> map = (java.util.Map<String, Object>) this.value;
+        map.remove(key);
+        return this;
     }
 
     /*

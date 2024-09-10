@@ -21,7 +21,7 @@ public class Main {
         System.out.println("This is demo.Main");
         var ary = Dynamic.fromJson("{\"$json\": [11, 22.0, 33]}");
         Sys.echo(ary, "ary");
-        ary.asList().remove(1);
+        ary.remove(1);
         Sys.echo(ary, "ary");
         var o = Sys.fromJson("{\"a\": [1,2,3]}");
         Sys.echo(o);
@@ -92,10 +92,10 @@ public class Main {
             //throw new RuntimeException(e);
             e.printStackTrace();
         }
-        qiitaObj.asMap().remove("body");
-        qiitaObj.asMap().remove("rendered_body");
-        var userObj = qiitaObj.get("user");
-        userObj.asMap().remove("description");
+        qiitaObj
+                .remove("body")
+                .remove("rendered_body");
+        qiitaObj.put("user", qiitaObj.get("user").get("id"));
         Sys.echo(qiitaObj);
         Sys.echoJson(qiitaObj);
         //Sys.echo(qiitaObj.asMap().get("title"), "title");

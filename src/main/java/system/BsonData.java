@@ -95,6 +95,7 @@ public class BsonData {
         if (x instanceof BsonValue) return (BsonValue) x;
         if (x == null) return new BsonNull();
         if (x instanceof Dynamic) x = Dynamic.strip(x);
+        if (x instanceof Boolean) return new BsonBoolean((boolean) x);
         if (x instanceof Integer) return new BsonInt32((int) x);
         if (x instanceof Long) return new BsonInt64((long) x);
         if (x instanceof Double) return new BsonDouble((double) x);
@@ -125,6 +126,7 @@ public class BsonData {
     public static Object FromValue(BsonValue x) {
         if (x == null) return null;
         if (x instanceof BsonNull) return null;
+        if (x instanceof BsonBoolean) return x.asBoolean().getValue();
         if (x instanceof BsonInt32) return x.asInt32().intValue();
         if (x instanceof BsonInt64) return x.asInt64().longValue();
         if (x instanceof BsonDouble) return x.asDouble().doubleValue();

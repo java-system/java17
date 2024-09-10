@@ -70,7 +70,7 @@ public class Main {
         Dynamic qiitaObj = null;
         try {
             String text = Files.readString(file, Charset.forName("UTF-8"));
-            Sys.echo(text);
+            //Sys.echo(text);
             var stopWatch = new org.apache.commons.lang3.time.StopWatch();
             //計測スタート
             stopWatch.start();
@@ -82,12 +82,19 @@ public class Main {
             //計測終了
             stopWatch.stop();
             //結果を取得
-            Sys.echo(qiitaObj);
+            //Sys.echo(qiitaObj);
             System.out.println(stopWatch.formatTime());
         } catch (IOException e) {
             //throw new RuntimeException(e);
             e.printStackTrace();
         }
-        Sys.echo(qiitaObj.asMap().get("title"), "title");
+        qiitaObj.asMap().remove("body");
+        qiitaObj.asMap().remove("rendered_body");
+        var userObj = qiitaObj.get("user");
+        userObj.asMap().remove("description");
+        Sys.echo(qiitaObj);
+        Sys.echoJson(qiitaObj);
+        //Sys.echo(qiitaObj.asMap().get("title"), "title");
+        //Sys.echo(qiitaObj.asMap().get("body"));
     }
 }

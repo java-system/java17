@@ -19,6 +19,10 @@ import java.nio.file.Paths;
 public class Main {
     public static void main(String[] args) {
         System.out.println("This is demo.Main");
+        var ary = Dynamic.fromJson("{\"$json\": [11, 22.0, 33]}");
+        Sys.echo(ary, "ary");
+        ary.asList().remove(1);
+        Sys.echo(ary, "ary");
         var o = Sys.fromJson("{\"a\": [1,2,3]}");
         Sys.echo(o);
         var d = Dynamic.fromJson("{\"b\": [1,2.0,3]}");
